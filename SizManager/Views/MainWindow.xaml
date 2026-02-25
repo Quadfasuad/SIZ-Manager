@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:SizManager.ViewModels"
         Title="СИЗ Менеджер v1.0"
+        Icon="/siz.ico"
         Width="900" Height="850"
         MinWidth="750" MinHeight="600"
         WindowStartupLocation="CenterScreen">
@@ -32,7 +33,6 @@
             </MenuItem>
             <MenuItem Header="Справочник">
                 <MenuItem Header="Импорт справочника из JSON..." Command="{Binding ImportJsonCommand}" />
-                <MenuItem Header="Экспорт справочника в JSON..." Command="{Binding ExportJsonCommand}" />
                 <Separator />
                 <MenuItem Header="Просмотр справочника профессий" Command="{Binding OpenProfessionListCommand}" />
                 <Separator />
@@ -60,36 +60,20 @@
 
                     <!-- Database info -->
                     <GroupBox Header="СПРАВОЧНИК СИЗ">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0">
-                                <TextBlock>
-                                    <Run Text="Профессий в базе: " FontWeight="Bold" />
-                                    <Run Text="{Binding ProfessionCount, Mode=OneWay}" />
-                                </TextBlock>
-                                <TextBlock>
-                                    <Run Text="Версия: " />
-                                    <Run Text="{Binding DatabaseVersion, Mode=OneWay}" />
-                                </TextBlock>
-                                <TextBlock>
-                                    <Run Text="Последнее обновление: " />
-                                    <Run Text="{Binding LastUpdate, Mode=OneWay}" />
-                                </TextBlock>
-                            </StackPanel>
-                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                                <Button Content="Импорт из JSON..."
-                                        Command="{Binding ImportJsonCommand}"
-                                        Style="{StaticResource ActionButton}"
-                                        ToolTip="Импорт справочника профессий из JSON файла" />
-                                <Button Content="Экспорт в JSON..."
-                                        Command="{Binding ExportJsonCommand}"
-                                        Style="{StaticResource ActionButton}"
-                                        ToolTip="Экспорт справочника в JSON файл" />
-                            </StackPanel>
-                        </Grid>
+                        <StackPanel>
+                            <TextBlock>
+                                <Run Text="Профессий в базе: " FontWeight="Bold" />
+                                <Run Text="{Binding ProfessionCount, Mode=OneWay}" />
+                            </TextBlock>
+                            <TextBlock>
+                                <Run Text="Версия: " />
+                                <Run Text="{Binding DatabaseVersion, Mode=OneWay}" />
+                            </TextBlock>
+                            <TextBlock>
+                                <Run Text="Последнее обновление: " />
+                                <Run Text="{Binding LastUpdate, Mode=OneWay}" />
+                            </TextBlock>
+                        </StackPanel>
                     </GroupBox>
 
                     <!-- Employee data form -->

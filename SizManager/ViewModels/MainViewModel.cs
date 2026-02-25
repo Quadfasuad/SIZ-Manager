@@ -114,28 +114,6 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task ExportJsonAsync()
-    {
-        var path = _dialogService.SaveFileDialog(
-            "JSON файлы (*.json)|*.json",
-            $"siz_export_{DateTime.Now:yyyy-MM-dd}.json",
-            "Экспорт справочника в JSON");
-        if (path == null) return;
-
-        try
-        {
-            await _importService.ExportToJsonAsync(path);
-            StatusBarText = "Справочник экспортирован";
-            _dialogService.ShowMessage($"Справочник экспортирован:\n{path}");
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "ExportJson");
-            _dialogService.ShowError($"Ошибка экспорта:\n{ex.Message}");
-        }
-    }
-
-    [RelayCommand]
     private void OpenEmployeeList()
     {
         var window = new EmployeeListWindow();
