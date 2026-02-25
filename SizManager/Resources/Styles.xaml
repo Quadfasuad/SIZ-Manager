@@ -1,0 +1,46 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:helpers="clr-namespace:SizManager.Helpers">
+
+    <!-- Converters -->
+    <helpers:GenderConverter x:Key="GenderConverter" />
+    <helpers:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+
+    <!-- GroupBox style -->
+    <Style TargetType="GroupBox">
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="Padding" Value="8" />
+    </Style>
+
+    <!-- Button style -->
+    <Style x:Key="ActionButton" TargetType="Button">
+        <Setter Property="Padding" Value="12,6" />
+        <Setter Property="Margin" Value="4,2" />
+        <Setter Property="MinWidth" Value="100" />
+    </Style>
+
+    <!-- TextBox style for form fields -->
+    <Style x:Key="FormTextBox" TargetType="TextBox">
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="Padding" Value="4,3" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <!-- Label style for form labels -->
+    <Style x:Key="FormLabel" TargetType="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="4,2" />
+    </Style>
+
+    <!-- DataGrid style -->
+    <Style TargetType="DataGrid">
+        <Setter Property="AutoGenerateColumns" Value="False" />
+        <Setter Property="CanUserAddRows" Value="False" />
+        <Setter Property="CanUserDeleteRows" Value="False" />
+        <Setter Property="SelectionMode" Value="Single" />
+        <Setter Property="AlternatingRowBackground" Value="#F5F5F5" />
+        <Setter Property="GridLinesVisibility" Value="Horizontal" />
+        <Setter Property="HorizontalGridLinesBrush" Value="#E0E0E0" />
+    </Style>
+
+</ResourceDictionary>

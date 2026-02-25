@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon />
+    <AssemblyName>SizManager</AssemblyName>
+    <RootNamespace>SizManager</RootNamespace>
+    <Version>1.0.0</Version>
+    <AssemblyTitle>СИЗ Менеджер</AssemblyTitle>
+    <Description>Программа для автоматизации заполнения личных карточек учета выдачи СИЗ</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Database -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
+
+    <!-- MVVM -->
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+
+    <!-- DOCX -->
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.1.1" />
+
+    <!-- PDF -->
+    <PackageReference Include="QuestPDF" Version="2024.3.0" />
+
+    <!-- Excel -->
+    <PackageReference Include="ClosedXML" Version="0.104.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Templates\card_template_with_placeholders.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\siz_database_full.json" />
+  </ItemGroup>
+
+</Project>

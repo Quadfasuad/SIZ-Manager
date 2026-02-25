@@ -1,0 +1,312 @@
+<Window x:Class="SizManager.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:SizManager.ViewModels"
+        Title="СИЗ Менеджер v1.0"
+        Width="900" Height="850"
+        MinWidth="750" MinHeight="600"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.InputBindings>
+        <KeyBinding Gesture="Ctrl+N" Command="{Binding NewCardCommand}" />
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding Card.SaveCommand}" />
+        <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenEmployeeListCommand}" />
+    </Window.InputBindings>
+
+    <DockPanel>
+        <!-- Menu -->
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Новая карточка" Command="{Binding NewCardCommand}"
+                          InputGestureText="Ctrl+N" />
+                <MenuItem Header="Открыть карточку..." Command="{Binding OpenEmployeeListCommand}"
+                          InputGestureText="Ctrl+O" />
+                <MenuItem Header="Сохранить" Command="{Binding Card.SaveCommand}"
+                          InputGestureText="Ctrl+S" />
+                <Separator />
+                <MenuItem Header="Экспорт в DOCX..." Command="{Binding Card.ExportDocxCommand}" />
+                <MenuItem Header="Экспорт в PDF..." Command="{Binding Card.ExportPdfCommand}" />
+                <MenuItem Header="Экспорт в Excel..." Command="{Binding Card.ExportExcelCommand}" />
+                <Separator />
+                <MenuItem Header="Выход" Click="MenuItem_Exit_Click" />
+            </MenuItem>
+            <MenuItem Header="Справочник">
+                <MenuItem Header="Импорт справочника из JSON..." Command="{Binding ImportJsonCommand}" />
+                <MenuItem Header="Экспорт справочника в JSON..." Command="{Binding ExportJsonCommand}" />
+                <Separator />
+                <MenuItem Header="Просмотр справочника профессий" Command="{Binding OpenProfessionListCommand}" />
+                <Separator />
+                <MenuItem Header="Управление резервными копиями" Command="{Binding ManageBackupsCommand}" />
+            </MenuItem>
+            <MenuItem Header="Помощь">
+                <MenuItem Header="О программе" Command="{Binding ShowAboutCommand}" />
+            </MenuItem>
+        </Menu>
+
+        <!-- Status bar -->
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusBarText}" />
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock Text="{Binding Card.StatusMessage}" Foreground="Gray" />
+            </StatusBarItem>
+        </StatusBar>
+
+        <!-- Import progress overlay -->
+        <Grid>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="5">
+
+                    <!-- Database info -->
+                    <GroupBox Header="СПРАВОЧНИК СИЗ">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock>
+                                    <Run Text="Профессий в базе: " FontWeight="Bold" />
+                                    <Run Text="{Binding ProfessionCount, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Версия: " />
+                                    <Run Text="{Binding DatabaseVersion, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Последнее обновление: " />
+                                    <Run Text="{Binding LastUpdate, Mode=OneWay}" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button Content="Импорт из JSON..."
+                                        Command="{Binding ImportJsonCommand}"
+                                        Style="{StaticResource ActionButton}"
+                                        ToolTip="Импорт справочника профессий из JSON файла" />
+                                <Button Content="Экспорт в JSON..."
+                                        Command="{Binding ExportJsonCommand}"
+                                        Style="{StaticResource ActionButton}"
+                                        ToolTip="Экспорт справочника в JSON файл" />
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Employee data form -->
+                    <GroupBox Header="ДАННЫЕ СОТРУДНИКА">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="170" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="170" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!-- Row 0: Card number + Personnel number -->
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Номер карточки:"
+                                       Style="{StaticResource FormLabel}" />
+                            <TextBox Grid.Row="0" Grid.Column="1"
+                                     Text="{Binding Card.CardNumber, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource FormTextBox}"
+                                     ToolTip="Номер личной карточки" />
+                            <TextBlock Grid.Row="0" Grid.Column="2" Text="Табельный номер:"
+                                       Style="{StaticResource FormLabel}" />
+                            <TextBox Grid.Row="0" Grid.Column="3"
+                                     Text="{Binding Card.PersonnelNumber, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource FormTextBox}" />
+
+                            <!-- Row 1: Last name + Gender -->
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Фамилия:"
+                                       Style="{StaticResource FormLabel}" />
+                            <TextBox Grid.Row="1" Grid.Column="1"
+                                     Text="{Binding Card.LastName, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource FormTextBox}" />
+                            <TextBlock Grid.Row="1" Grid.Column="2" Text="Пол:"
+                                       Style="{StaticResource FormLabel}" />
+                            <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                                <RadioButton Content="М" Margin="4,0"
+                                             IsChecked="{Binding Card.Gender, Converter={StaticResource GenderConverter}, ConverterParameter=М}" />
+                                <RadioButton Content="Ж" Margin="4,0"
+                                             IsChecked="{Binding Card.Gender, Converter={StaticResource GenderConverter}, ConverterParameter=Ж}" />
+                            </StackPanel>
+
+                            <!-- Row 2: First name + Department -->
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Имя:"
+                                       Style="{StaticResource FormLabel}" />
+                            <TextBox Grid.Row="2" Grid.Column="1"
+                                     Text="{Binding Card.FirstName, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource FormTextBox}" />
+                            <TextBlock Grid.Row="2" Grid.Column="2" Text="Подразделение:"
+                                       Style="{StaticResource FormLabel}" />
+                            <TextBox Grid.Row="2" Grid.Column="3"
+                                     Text="{Binding Card.Department, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource FormTextBox}" />
+
+                            <!-- Row 3: Middle name + Hire date -->
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Отчество:"
+                                       Style="{StaticResource FormLabel}" />
+                            <TextBox Grid.Row="3" Grid.Column="1"
+                                     Text="{Binding Card.MiddleName, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource FormTextBox}" />
+                            <TextBlock Grid.Row="3" Grid.Column="2" Text="Дата поступления:"
+                                       Style="{StaticResource FormLabel}" />
+                            <DatePicker Grid.Row="3" Grid.Column="3"
+                                        SelectedDate="{Binding Card.HireDate}"
+                                        Margin="2" />
+
+                            <!-- Row 4: Profession -->
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Профессия (должность): *"
+                                       Style="{StaticResource FormLabel}" FontWeight="Bold" />
+                            <Grid Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3">
+                                <TextBox x:Name="ProfessionTextBox"
+                                         Text="{Binding Card.ProfessionSearchText, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource FormTextBox}"
+                                         ToolTip="Начните вводить название или номер профессии для поиска" />
+                                <Popup IsOpen="{Binding Card.IsDropDownOpen, Mode=TwoWay}"
+                                       StaysOpen="False"
+                                       PlacementTarget="{Binding ElementName=ProfessionTextBox}"
+                                       Placement="Bottom"
+                                       Width="{Binding ActualWidth, ElementName=ProfessionTextBox}"
+                                       MaxHeight="300">
+                                    <Border Background="White" BorderBrush="Gray" BorderThickness="1">
+                                        <ListBox ItemsSource="{Binding Card.FilteredProfessions}"
+                                                 DisplayMemberPath="DisplayName"
+                                                 SelectedItem="{Binding Card.SelectedProfession}"
+                                                 MaxHeight="290"
+                                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                                 MouseDoubleClick="ProfessionListBox_MouseDoubleClick"
+                                                 SelectionChanged="ProfessionListBox_SelectionChanged" />
+                                    </Border>
+                                </Popup>
+                            </Grid>
+
+                            <!-- Row 5: Change date -->
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Дата изменения профессии:"
+                                       Style="{StaticResource FormLabel}" />
+                            <DatePicker Grid.Row="5" Grid.Column="1"
+                                        SelectedDate="{Binding Card.ChangeDate}"
+                                        Margin="2" />
+
+                            <!-- Row 6: Sizes header -->
+                            <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4"
+                                       Text="Размеры:" FontWeight="Bold" Margin="4,10,4,2" />
+
+                            <!-- Row 7: Height + Clothing + Shoe -->
+                            <StackPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4"
+                                        Orientation="Horizontal" Margin="4,2">
+                                <TextBlock Text="Рост:" VerticalAlignment="Center" Margin="0,0,4,0" />
+                                <TextBox Text="{Binding Card.HeightText, UpdateSourceTrigger=PropertyChanged}"
+                                         Width="60" Style="{StaticResource FormTextBox}" />
+                                <TextBlock Text="Одежда:" VerticalAlignment="Center" Margin="12,0,4,0" />
+                                <TextBox Text="{Binding Card.ClothingSize, UpdateSourceTrigger=PropertyChanged}"
+                                         Width="70" Style="{StaticResource FormTextBox}" />
+                                <TextBlock Text="Обувь:" VerticalAlignment="Center" Margin="12,0,4,0" />
+                                <TextBox Text="{Binding Card.ShoeSize, UpdateSourceTrigger=PropertyChanged}"
+                                         Width="70" Style="{StaticResource FormTextBox}" />
+                            </StackPanel>
+
+                            <!-- Row 8: Headwear + Respirators + Gloves -->
+                            <StackPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="4"
+                                        Orientation="Horizontal" Margin="4,2">
+                                <TextBlock Text="Головной убор:" VerticalAlignment="Center" Margin="0,0,4,0" />
+                                <TextBox Text="{Binding Card.HeadwearSize, UpdateSourceTrigger=PropertyChanged}"
+                                         Width="70" Style="{StaticResource FormTextBox}" />
+                                <TextBlock Text="СИЗОД:" VerticalAlignment="Center" Margin="12,0,4,0" />
+                                <TextBox Text="{Binding Card.RespiratorsSize, UpdateSourceTrigger=PropertyChanged}"
+                                         Width="70" Style="{StaticResource FormTextBox}" />
+                                <TextBlock Text="СИЗ рук:" VerticalAlignment="Center" Margin="12,0,4,0" />
+                                <TextBox Text="{Binding Card.GlovesSize, UpdateSourceTrigger=PropertyChanged}"
+                                         Width="70" Style="{StaticResource FormTextBox}" />
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- SIZ table -->
+                    <GroupBox Header="СИЗ ДЛЯ ДАННОЙ ПРОФЕССИИ">
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,5,0,0">
+                                <Button Content="+ Добавить СИЗ"
+                                        Command="{Binding Card.AddSizCommand}"
+                                        Style="{StaticResource ActionButton}"
+                                        ToolTip="Добавить новую запись СИЗ" />
+                                <Button Content="Удалить СИЗ"
+                                        Command="{Binding Card.RemoveSizCommand}"
+                                        Style="{StaticResource ActionButton}"
+                                        ToolTip="Удалить выбранную запись СИЗ" />
+                            </StackPanel>
+                            <DataGrid ItemsSource="{Binding Card.SizItems}"
+                                      SelectedItem="{Binding Card.SelectedSizItem}"
+                                      MinHeight="150" MaxHeight="350"
+                                      CanUserSortColumns="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Тип СИЗ" Binding="{Binding Type}"
+                                                        Width="200" />
+                                    <DataGridTextColumn Header="Наименование СИЗ" Binding="{Binding Name}"
+                                                        Width="*" />
+                                    <DataGridTextColumn Header="Норма выдачи" Binding="{Binding Norm}"
+                                                        Width="120" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DockPanel>
+                    </GroupBox>
+
+                    <!-- Action buttons -->
+                    <StackPanel Orientation="Horizontal" Margin="5,10" HorizontalAlignment="Left">
+                        <Button Content="Новая карточка"
+                                Command="{Binding NewCardCommand}"
+                                Style="{StaticResource ActionButton}"
+                                ToolTip="Создать новую карточку (Ctrl+N)" />
+                        <Button Content="Сохранить"
+                                Command="{Binding Card.SaveCommand}"
+                                Style="{StaticResource ActionButton}" FontWeight="Bold"
+                                ToolTip="Сохранить карточку (Ctrl+S)" />
+                        <Button Content="Список карточек..."
+                                Command="{Binding OpenEmployeeListCommand}"
+                                Style="{StaticResource ActionButton}"
+                                ToolTip="Открыть список сохраненных карточек (Ctrl+O)" />
+                        <Separator Margin="10,0" />
+                        <Button Content="Экспорт в DOCX"
+                                Command="{Binding Card.ExportDocxCommand}"
+                                Style="{StaticResource ActionButton}"
+                                ToolTip="Экспорт в Word документ" />
+                        <Button Content="Экспорт в PDF"
+                                Command="{Binding Card.ExportPdfCommand}"
+                                Style="{StaticResource ActionButton}"
+                                ToolTip="Экспорт в PDF документ" />
+                        <Button Content="Экспорт в Excel"
+                                Command="{Binding Card.ExportExcelCommand}"
+                                Style="{StaticResource ActionButton}"
+                                ToolTip="Экспорт в Excel файл" />
+                    </StackPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Import overlay -->
+            <Border Background="#80000000"
+                    Visibility="{Binding IsImporting, Converter={StaticResource BoolToVisibility}}">
+                <Border VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Background="White" Padding="30" CornerRadius="4">
+                <StackPanel MinWidth="300">
+                    <TextBlock Text="Импорт справочника..." FontSize="16" FontWeight="Bold"
+                               HorizontalAlignment="Center" Margin="0,0,0,10" />
+                    <ProgressBar Height="20" IsIndeterminate="True" Margin="0,0,0,5" />
+                    <TextBlock Text="{Binding StatusBarText}" HorizontalAlignment="Center" />
+                </StackPanel>
+                </Border>
+            </Border>
+        </Grid>
+    </DockPanel>
+</Window>
