@@ -47,10 +47,6 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "Запустить {#MyAppName}"; Flags: nowait postinstall skipifsilent
 
-[UninstallDelete]
-; Clean up app directory
-Type: filesandirs; Name: "{app}"
-
 [Code]
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 var
