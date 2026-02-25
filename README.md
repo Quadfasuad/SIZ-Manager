@@ -27,12 +27,12 @@ Desktop приложение для Windows, автоматизирующее с
 
 ```
 SizManager/
-├── .git/                                      # Git репозиторий
-├── card_template_with_placeholders.docx       # Шаблон карточки
-├── siz_database_full.json                     # База профессий (2988 шт)
-├── TECHNICAL_SPECIFICATION.md                 # ⭐ Полное ТЗ
-├── README.md                                  # Этот файл
-└── SizManager/                                # C# проект (создается)
+├── .git/                                     
+├── card_template_with_placeholders.docx       
+├── siz_database_full.json                     
+├── TECHNICAL_SPECIFICATION.md                 
+├── README.md                                  
+└── SizManager/                                
     ├── Models/
     ├── Views/
     ├── ViewModels/
