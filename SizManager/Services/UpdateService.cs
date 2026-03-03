@@ -31,6 +31,11 @@ public class UpdateService
     public async Task<UpdateInfo?> CheckForUpdateAsync()
     {
         var response = await _httpClient.GetAsync(GitHubApiUrl);
+
+        // 404 = релизов ещё нет, не ошибка
+        if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            return null;
+
         response.EnsureSuccessStatusCode();
 
         using var doc = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync());

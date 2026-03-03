@@ -10,6 +10,9 @@ public class Profession
 
     public virtual ICollection<ProfessionSIZ> SizList { get; set; } = new List<ProfessionSIZ>();
 
+    // Для числовой сортировки в DataGrid
+    public int NumberAsInt => int.TryParse(Number, out var n) ? n : 0;
+
     public string DisplayName =>
         Name + (string.IsNullOrEmpty(Number) ? "" : $" (№{Number})");
 }
