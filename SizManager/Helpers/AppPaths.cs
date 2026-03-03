@@ -14,6 +14,7 @@ public static class AppPaths
     // --- Пользовательские данные (DataDir, запись разрешена) ---
     public static string DatabasePath => Path.Combine(DataDir, "database.db");
     public static string BackupsDir => Path.Combine(DataDir, "Backups");
+    public static string UpdatesDir => Path.Combine(DataDir, "Updates");
     public static string ErrorLogPath => Path.Combine(DataDir, "errors.log");
 
     // --- Файлы приложения (AppDir, только чтение) ---

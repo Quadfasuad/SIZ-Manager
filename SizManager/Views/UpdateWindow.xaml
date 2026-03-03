@@ -1,0 +1,53 @@
+<Window x:Class="SizManager.Views.UpdateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Доступно обновление"
+        Width="480" SizeToContent="Height"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Icon="/siz.ico">
+
+    <StackPanel Margin="24">
+        <TextBlock Text="Доступно обновление" FontSize="20" FontWeight="Bold"
+                   HorizontalAlignment="Center" Margin="0,0,0,16" />
+
+        <Grid Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Текущая версия: " Margin="0,0,8,4" />
+            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="CurrentVersionText" FontWeight="Bold" Margin="0,0,0,4" />
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Новая версия: " Margin="0,0,8,0" />
+            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="NewVersionText" FontWeight="Bold"
+                       Foreground="#2E7D32" />
+        </Grid>
+
+        <TextBlock Text="Что нового:" FontWeight="SemiBold" Margin="0,0,0,4" />
+        <Border BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="3"
+                MaxHeight="200" Margin="0,0,0,16">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="8">
+                <TextBlock x:Name="ChangelogText" TextWrapping="Wrap" />
+            </ScrollViewer>
+        </Border>
+
+        <!-- Прогресс скачивания (скрыт по умолчанию) -->
+        <StackPanel x:Name="ProgressPanel" Visibility="Collapsed" Margin="0,0,0,16">
+            <TextBlock x:Name="ProgressText" Text="Скачивание..." Margin="0,0,0,4" />
+            <ProgressBar x:Name="ProgressBar" Height="20" Minimum="0" Maximum="100" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="UpdateButton" Content="Обновить" Padding="24,8" Margin="0,0,12,0"
+                    FontWeight="Bold" Click="UpdateButton_Click" IsDefault="True" />
+            <Button x:Name="LaterButton" Content="Позже" Padding="24,8"
+                    Click="LaterButton_Click" IsCancel="True" />
+        </StackPanel>
+    </StackPanel>
+</Window>

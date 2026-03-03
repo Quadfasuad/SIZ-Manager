@@ -61,15 +61,37 @@ public partial class App : Application
         var docxExportService = new DocxExportService();
         var pdfExportService = new PdfExportService();
         var excelExportService = new ExcelExportService();
+        var updateService = new UpdateService();
 
         // Create and show main window
         var mainVM = new MainViewModel(
             importService, backupService, validationService,
             docxExportService, pdfExportService, excelExportService,
-            dialogService);
+            updateService, dialogService);
 
         var mainWindow = new MainWindow { DataContext = mainVM };
         MainWindow = mainWindow;
         mainWindow.Show();
+
+        // Background update check (non-blocking)
+        _ = CheckForUpdateAsync(updateService);
+    }
+
+    private async Task CheckForUpdateAsync(UpdateService updateService)
+    {
+        try
+        {
+            var update = await updateService.CheckForUpdateAsync();
+            if (update != null)
+            {
+                var window = new UpdateWindow(update, updateService);
+                window.Owner = MainWindow;
+                window.ShowDialog();
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Update check");
+        }
     }
 }

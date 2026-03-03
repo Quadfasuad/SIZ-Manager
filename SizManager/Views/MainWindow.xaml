@@ -39,6 +39,8 @@
                 <MenuItem Header="Управление резервными копиями" Command="{Binding ManageBackupsCommand}" />
             </MenuItem>
             <MenuItem Header="Помощь">
+                <MenuItem Header="Проверить обновления..." Command="{Binding CheckUpdateCommand}" />
+                <Separator />
                 <MenuItem Header="О программе" Command="{Binding ShowAboutCommand}" />
             </MenuItem>
         </Menu>

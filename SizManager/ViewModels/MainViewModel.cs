@@ -15,6 +15,7 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly JsonImportService _importService;
     private readonly BackupService _backupService;
+    private readonly UpdateService _updateService;
     private readonly DialogService _dialogService;
 
     // Database info
@@ -35,10 +36,12 @@ public partial class MainViewModel : ObservableObject
         DocxExportService docxExportService,
         PdfExportService pdfExportService,
         ExcelExportService excelExportService,
+        UpdateService updateService,
         DialogService dialogService)
     {
         _importService = importService;
         _backupService = backupService;
+        _updateService = updateService;
         _dialogService = dialogService;
 
         Card = new EmployeeCardViewModel(
@@ -135,6 +138,33 @@ public partial class MainViewModel : ObservableObject
         window.DataContext = vm;
         window.Owner = System.Windows.Application.Current.MainWindow;
         window.ShowDialog();
+    }
+
+    [RelayCommand]
+    private async Task CheckUpdateAsync()
+    {
+        StatusBarText = "Проверка обновлений...";
+        try
+        {
+            var update = await _updateService.CheckForUpdateAsync();
+            if (update != null)
+            {
+                var window = new UpdateWindow(update, _updateService);
+                window.Owner = System.Windows.Application.Current.MainWindow;
+                window.ShowDialog();
+            }
+            else
+            {
+                _dialogService.ShowMessage("У вас установлена последняя версия.");
+            }
+            StatusBarText = "Готово";
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "CheckUpdate");
+            StatusBarText = "Готово";
+            _dialogService.ShowError($"Не удалось проверить обновления:\n{ex.Message}");
+        }
     }
 
     [RelayCommand]
