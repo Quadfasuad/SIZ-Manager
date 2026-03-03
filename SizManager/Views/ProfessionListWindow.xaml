@@ -40,7 +40,7 @@
                           SelectedItem="{Binding SelectedProfession}"
                           IsReadOnly="True">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="№" Binding="{Binding Number}" Width="60" />
+                        <DataGridTextColumn Header="№" Binding="{Binding Number}" SortMemberPath="NumberAsInt" Width="60" />
                         <DataGridTextColumn Header="Название профессии" Binding="{Binding Name}" Width="*" />
                     </DataGrid.Columns>
                 </DataGrid>

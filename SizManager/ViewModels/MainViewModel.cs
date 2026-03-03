@@ -1,3 +1,4 @@
+using System.Reflection;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
@@ -57,14 +58,14 @@ public partial class MainViewModel : ObservableObject
         {
             using var context = new SizDbContext();
             ProfessionCount = context.Professions.Count();
+            var v = Assembly.GetExecutingAssembly().GetName().Version;
+            DatabaseVersion = v != null ? $"{v.Major}.{v.Minor}.{v.Build}" : "—";
             if (ProfessionCount > 0)
             {
-                DatabaseVersion = "1.0";
                 LastUpdate = context.Professions.Max(p => p.UpdatedAt).ToString("dd.MM.yyyy");
             }
             else
             {
-                DatabaseVersion = "—";
                 LastUpdate = "—";
             }
         }
