@@ -1,0 +1,38 @@
+<Window x:Class="SizManager.Views.SplashWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Загрузка"
+        Width="900"
+        Height="506"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        Topmost="True"
+        Background="Transparent">
+    <Grid>
+        <Image Source="/Resources/Banner.png"
+               Stretch="UniformToFill"
+               RenderOptions.BitmapScalingMode="HighQuality" />
+
+        <Border HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Background="#66000000"
+                CornerRadius="12"
+                Padding="34,18"
+                Margin="0,0,0,34">
+            <StackPanel>
+                <TextBlock Text="Загрузка"
+                           Foreground="White"
+                           FontSize="34"
+                           FontWeight="SemiBold"
+                           TextAlignment="Center" />
+                <ProgressBar Margin="0,16,0,0"
+                             Width="260"
+                             Height="8"
+                             IsIndeterminate="True" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

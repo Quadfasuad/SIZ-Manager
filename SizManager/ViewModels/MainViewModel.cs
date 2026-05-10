@@ -26,6 +26,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private bool _isImporting;
     [ObservableProperty] private int _importProgress;
     [ObservableProperty] private string _statusBarText = "Готово";
+    [ObservableProperty] private int _selectedMainTabIndex;
 
     // Child ViewModel
     public EmployeeCardViewModel Card { get; }
@@ -218,5 +219,19 @@ public partial class MainViewModel : ObservableObject
     {
         Card.NewCardCommand.Execute(null);
         StatusBarText = "Новая карточка";
+    }
+
+    [RelayCommand]
+    private void ShowCardTab()
+    {
+        SelectedMainTabIndex = 0;
+        StatusBarText = "Карточка СИЗ";
+    }
+
+    [RelayCommand]
+    private void ShowDermatologicalTab()
+    {
+        SelectedMainTabIndex = 1;
+        StatusBarText = "Дерматологические СИЗ";
     }
 }

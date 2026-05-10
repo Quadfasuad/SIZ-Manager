@@ -8,16 +8,40 @@
 
     <DockPanel Margin="10">
         <!-- Search -->
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
-            <TextBlock Text="Поиск:" VerticalAlignment="Center" Margin="0,0,8,0" />
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     Width="300" Padding="4,3"
-                     ToolTip="Поиск по ФИО, табельному номеру или профессии" />
-            <TextBlock VerticalAlignment="Center" Margin="15,0,0,0">
-                <Run Text="Найдено: " />
-                <Run Text="{Binding TotalCount, Mode=OneWay}" />
-            </TextBlock>
-        </StackPanel>
+        <Border DockPanel.Dock="Top"
+                Background="{StaticResource BrushSurfaceMuted}"
+                BorderBrush="{StaticResource BrushBorder}"
+                BorderThickness="1"
+                CornerRadius="14"
+                Padding="12"
+                Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <TextBlock Text="ПОИСК КАРТОЧЕК"
+                               Style="{StaticResource SectionPanelTitle}" />
+                    <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                             Width="320"
+                             ToolTip="Поиск по ФИО, табельному номеру или профессии" />
+                </StackPanel>
+
+                <Border Grid.Column="1"
+                        Style="{StaticResource SectionPanelBorder}"
+                        Padding="12"
+                        Margin="12,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding TotalCount, Mode=OneWay}"
+                                   Style="{StaticResource StatValueText}" />
+                        <TextBlock Text="Найдено карточек"
+                                   Style="{StaticResource StatCaptionText}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
 
         <!-- Buttons -->
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"

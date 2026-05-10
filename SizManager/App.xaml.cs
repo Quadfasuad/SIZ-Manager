@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Threading;
 using SizManager.Helpers;
 using SizManager.Services;
 using SizManager.Services.Database;
@@ -15,6 +16,10 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
+        var splashWindow = new SplashWindow();
+        splashWindow.Show();
+        Dispatcher.Invoke(() => { }, DispatcherPriority.Render);
+
         // Configure QuestPDF license
         QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
@@ -30,6 +35,7 @@ public partial class App : Application
         catch (Exception ex)
         {
             Logger.LogError(ex, "Database initialization");
+            splashWindow.Close();
             MessageBox.Show(
                 $"Ошибка инициализации базы данных:\n{ex.Message}",
                 "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -85,6 +91,7 @@ public partial class App : Application
         var mainWindow = new MainWindow { DataContext = mainVM };
         MainWindow = mainWindow;
         mainWindow.Show();
+        splashWindow.Close();
 
         // Background update check (non-blocking)
         _ = CheckForUpdateAsync(updateService);
