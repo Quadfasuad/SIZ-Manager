@@ -57,8 +57,12 @@
 
         <!-- Import progress overlay -->
         <Grid>
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel Margin="5">
+            <TabControl>
+                <TabItem Header="Карточка СИЗ">
+                    <ScrollViewer x:Name="CardScrollViewer"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel Margin="5">
 
                     <!-- Database info -->
                     <GroupBox Header="СПРАВОЧНИК СИЗ">
@@ -190,8 +194,8 @@
                                        Text="Размеры:" FontWeight="Bold" Margin="4,10,4,2" />
 
                             <!-- Row 7: Height + Clothing + Shoe -->
-                            <StackPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4"
-                                        Orientation="Horizontal" Margin="4,2">
+                            <WrapPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4"
+                                       Margin="4,2">
                                 <TextBlock Text="Рост:" VerticalAlignment="Center" Margin="0,0,4,0" />
                                 <TextBox Text="{Binding Card.HeightText, UpdateSourceTrigger=PropertyChanged}"
                                          Width="60" Style="{StaticResource FormTextBox}" />
@@ -201,11 +205,11 @@
                                 <TextBlock Text="Обувь:" VerticalAlignment="Center" Margin="12,0,4,0" />
                                 <TextBox Text="{Binding Card.ShoeSize, UpdateSourceTrigger=PropertyChanged}"
                                          Width="70" Style="{StaticResource FormTextBox}" />
-                            </StackPanel>
+                            </WrapPanel>
 
                             <!-- Row 8: Headwear + Respirators + Gloves -->
-                            <StackPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="4"
-                                        Orientation="Horizontal" Margin="4,2">
+                            <WrapPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="4"
+                                       Margin="4,2">
                                 <TextBlock Text="Головной убор:" VerticalAlignment="Center" Margin="0,0,4,0" />
                                 <TextBox Text="{Binding Card.HeadwearSize, UpdateSourceTrigger=PropertyChanged}"
                                          Width="70" Style="{StaticResource FormTextBox}" />
@@ -215,14 +219,16 @@
                                 <TextBlock Text="СИЗ рук:" VerticalAlignment="Center" Margin="12,0,4,0" />
                                 <TextBox Text="{Binding Card.GlovesSize, UpdateSourceTrigger=PropertyChanged}"
                                          Width="70" Style="{StaticResource FormTextBox}" />
-                            </StackPanel>
+                            </WrapPanel>
                         </Grid>
                     </GroupBox>
 
                     <!-- SIZ table -->
                     <GroupBox Header="СИЗ ДЛЯ ДАННОЙ ПРОФЕССИИ">
                         <DockPanel>
-                            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,5,0,0">
+                            <WrapPanel DockPanel.Dock="Bottom"
+                                       Margin="0,5,0,0"
+                                       MaxWidth="{Binding ActualWidth, ElementName=CardScrollViewer}">
                                 <Button Content="+ Добавить СИЗ"
                                         Command="{Binding Card.AddSizCommand}"
                                         Style="{StaticResource ActionButton}"
@@ -231,7 +237,7 @@
                                         Command="{Binding Card.RemoveSizCommand}"
                                         Style="{StaticResource ActionButton}"
                                         ToolTip="Удалить выбранную запись СИЗ" />
-                            </StackPanel>
+                            </WrapPanel>
                             <DataGrid ItemsSource="{Binding Card.SizItems}"
                                       SelectedItem="{Binding Card.SelectedSizItem}"
                                       MinHeight="150" MaxHeight="350"
@@ -249,7 +255,9 @@
                     </GroupBox>
 
                     <!-- Action buttons -->
-                    <StackPanel Orientation="Horizontal" Margin="5,10" HorizontalAlignment="Left">
+                    <WrapPanel Margin="5,10"
+                               HorizontalAlignment="Left"
+                               MaxWidth="{Binding ActualWidth, ElementName=CardScrollViewer}">
                         <Button Content="Новая карточка"
                                 Command="{Binding NewCardCommand}"
                                 Style="{StaticResource ActionButton}"
@@ -262,7 +270,6 @@
                                 Command="{Binding OpenEmployeeListCommand}"
                                 Style="{StaticResource ActionButton}"
                                 ToolTip="Открыть список сохраненных карточек (Ctrl+O)" />
-                        <Separator Margin="10,0" />
                         <Button Content="Экспорт в DOCX"
                                 Command="{Binding Card.ExportDocxCommand}"
                                 Style="{StaticResource ActionButton}"
@@ -275,10 +282,147 @@
                                 Command="{Binding Card.ExportExcelCommand}"
                                 Style="{StaticResource ActionButton}"
                                 ToolTip="Экспорт в Excel файл" />
-                    </StackPanel>
+                    </WrapPanel>
 
-                </StackPanel>
-            </ScrollViewer>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Header="Дерматологические СИЗ">
+                    <Grid Margin="8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" MinWidth="260" />
+                            <ColumnDefinition Width="3*" MinWidth="320" />
+                        </Grid.ColumnDefinitions>
+
+                        <GroupBox Grid.ColumnSpan="2" Header="ПОДБОР ДЕРМАТОЛОГИЧЕСКИХ СИЗ ПО ВИДАМ РАБОТ">
+                            <StackPanel>
+                                <TextBlock Text="Отметьте один или несколько видов работ. Справа будет собрана таблица только с необходимыми средствами и нормами."
+                                           TextWrapping="Wrap" Margin="0,0,0,6" />
+                                <TextBlock>
+                                    <Run Text="Выбрано видов работ: " FontWeight="Bold" />
+                                    <Run Text="{Binding Dermatological.SelectedCount, Mode=OneWay}" />
+                                    <Run Text="; позиций в таблице: " FontWeight="Bold" />
+                                    <Run Text="{Binding Dermatological.RequirementCount, Mode=OneWay}" />
+                                </TextBlock>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <GroupBox Grid.Row="1" Grid.Column="0" Header="ВИДЫ РАБОТ">
+                            <ListBox ItemsSource="{Binding Dermatological.Rows}"
+                                     SelectedItem="{Binding Dermatological.SelectedRow}"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsIncluded, UpdateSourceTrigger=PropertyChanged}"
+                                                  Margin="2,4">
+                                            <TextBlock Text="{Binding WorkType}"
+                                                       TextWrapping="Wrap" />
+                                        </CheckBox>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </GroupBox>
+
+                        <GroupBox Grid.Row="1" Grid.Column="1" Header="СФОРМИРОВАННАЯ ТАБЛИЦА">
+                            <DockPanel>
+                                <Grid DockPanel.Dock="Top" Background="#E8EEF7" Margin="0,0,0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="120" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border BorderBrush="#B8C7D9" BorderThickness="1" Padding="5">
+                                        <TextBlock Text="Необходимое средство" FontWeight="Bold" TextAlignment="Center" />
+                                    </Border>
+                                    <Border Grid.Column="1" BorderBrush="#B8C7D9" BorderThickness="0,1,1,1" Padding="5">
+                                        <TextBlock Text="Норма" FontWeight="Bold" TextAlignment="Center" />
+                                    </Border>
+                                </Grid>
+
+                                <ListBox ItemsSource="{Binding Dermatological.Requirements}"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                            <Setter Property="Padding" Value="0" />
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Border Background="#DDEBF7" BorderBrush="#B8C7D9" BorderThickness="1" Padding="6">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsHeader}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Text="{Binding ProductType}"
+                                                               FontWeight="Bold"
+                                                               TextWrapping="Wrap" />
+                                                </Border>
+
+                                                <Grid>
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsHeader}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="120" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Border BorderBrush="#E0E0E0" BorderThickness="1,0,1,1" Padding="5">
+                                                        <TextBlock Text="{Binding ProductType}" TextWrapping="Wrap" />
+                                                    </Border>
+                                                    <Border Grid.Column="1" BorderBrush="#E0E0E0" BorderThickness="0,0,1,1" Padding="5">
+                                                        <TextBlock Text="{Binding Norm}" TextWrapping="Wrap" TextAlignment="Center" />
+                                                    </Border>
+                                                </Grid>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </DockPanel>
+                        </GroupBox>
+
+                        <WrapPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="0,8,0,0">
+                            <Button Content="Выбрать все"
+                                    Command="{Binding Dermatological.SelectAllCommand}"
+                                    Style="{StaticResource ActionButton}" />
+                            <Button Content="Снять выбор"
+                                    Command="{Binding Dermatological.ClearSelectionCommand}"
+                                    Style="{StaticResource ActionButton}" />
+                            <Button Content="Сбросить"
+                                    Command="{Binding Dermatological.ResetDefaultsCommand}"
+                                    Style="{StaticResource ActionButton}" />
+                            <Button Content="Экспорт в Excel"
+                                    Command="{Binding Dermatological.ExportExcelCommand}"
+                                    Style="{StaticResource ActionButton}"
+                                    FontWeight="Bold" />
+                            <Button Content="Экспорт в PDF"
+                                    Command="{Binding Dermatological.ExportPdfCommand}"
+                                    Style="{StaticResource ActionButton}"
+                                    FontWeight="Bold" />
+                        </WrapPanel>
+                    </Grid>
+                </TabItem>
+            </TabControl>
 
             <!-- Import overlay -->
             <Border Background="#80000000"

@@ -71,12 +71,15 @@ public partial class App : Application
         var docxExportService = new DocxExportService();
         var pdfExportService = new PdfExportService();
         var excelExportService = new ExcelExportService();
+        var dermatologicalExcelExportService = new DermatologicalExcelExportService();
+        var dermatologicalPdfExportService = new DermatologicalPdfExportService();
         var updateService = new UpdateService();
 
         // Create and show main window
         var mainVM = new MainViewModel(
             importService, backupService, validationService,
             docxExportService, pdfExportService, excelExportService,
+            dermatologicalExcelExportService, dermatologicalPdfExportService,
             updateService, dialogService);
 
         var mainWindow = new MainWindow { DataContext = mainVM };
