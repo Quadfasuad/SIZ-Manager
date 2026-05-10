@@ -42,12 +42,22 @@ public partial class App : Application
         var backupService = new BackupService();
         var importService = new JsonImportService(backupService);
 
-        // Auto-import embedded database on first launch (if no professions exist)
+        // Auto-import embedded database on first launch or when the bundled reference is newer.
         try
         {
             using var checkCtx = new SizDbContext();
-            if (!checkCtx.Professions.Any())
+            var currentProfessionCount = checkCtx.Professions.Count();
+            var embeddedProfessionCount = importService.GetEmbeddedProfessionCountAsync()
+                .GetAwaiter()
+                .GetResult();
+
+            if (currentProfessionCount < embeddedProfessionCount)
             {
+                if (currentProfessionCount > 0)
+                {
+                    backupService.CreateBackupAsync().GetAwaiter().GetResult();
+                }
+
                 var task = importService.ImportFromEmbeddedResourceAsync();
                 task.GetAwaiter().GetResult();
             }
