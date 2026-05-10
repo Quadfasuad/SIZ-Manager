@@ -8,16 +8,40 @@
 
     <DockPanel Margin="10">
         <!-- Search -->
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
-            <TextBlock Text="Поиск:" VerticalAlignment="Center" Margin="0,0,8,0" />
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     Width="300" Padding="4,3"
-                     ToolTip="Поиск по названию или номеру профессии" />
-            <TextBlock VerticalAlignment="Center" Margin="15,0,0,0">
-                <Run Text="Всего профессий: " />
-                <Run Text="{Binding TotalCount, Mode=OneWay}" />
-            </TextBlock>
-        </StackPanel>
+        <Border DockPanel.Dock="Top"
+                Background="{StaticResource BrushSurfaceMuted}"
+                BorderBrush="{StaticResource BrushBorder}"
+                BorderThickness="1"
+                CornerRadius="14"
+                Padding="12"
+                Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <TextBlock Text="ПОИСК ПО СПРАВОЧНИКУ"
+                               Style="{StaticResource SectionPanelTitle}" />
+                    <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                             Width="320"
+                             ToolTip="Поиск по названию или номеру профессии" />
+                </StackPanel>
+
+                <Border Grid.Column="1"
+                        Style="{StaticResource SectionPanelBorder}"
+                        Padding="12"
+                        Margin="12,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding TotalCount, Mode=OneWay}"
+                                   Style="{StaticResource StatValueText}" />
+                        <TextBlock Text="Профессий в выдаче"
+                                   Style="{StaticResource StatCaptionText}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
 
         <!-- Close button -->
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
@@ -35,7 +59,7 @@
 
             <!-- Professions list -->
             <DockPanel Grid.Column="0">
-                <TextBlock DockPanel.Dock="Top" Text="Профессии:" FontWeight="Bold" Margin="0,0,0,5" />
+                <TextBlock DockPanel.Dock="Top" Text="Профессии" FontWeight="Bold" Margin="0,0,0,5" />
                 <DataGrid ItemsSource="{Binding Professions}"
                           SelectedItem="{Binding SelectedProfession}"
                           IsReadOnly="True">
@@ -51,7 +75,7 @@
             <!-- SIZ list for selected profession -->
             <DockPanel Grid.Column="2">
                 <TextBlock DockPanel.Dock="Top" FontWeight="Bold" Margin="5,0,0,5">
-                    <Run Text="СИЗ" />
+                    <Run Text="СИЗ для профессии " />
                     <Run Text="{Binding SelectedProfession.Name, Mode=OneWay, FallbackValue=''}" />
                     <Run Text=": " />
                     <Run Text="{Binding SizItems.Count, Mode=OneWay, FallbackValue=0}" />

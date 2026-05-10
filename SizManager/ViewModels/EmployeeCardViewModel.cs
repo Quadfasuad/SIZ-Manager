@@ -22,6 +22,7 @@ public partial class EmployeeCardViewModel : ObservableObject
     private List<Profession> _allProfessions = new();
     private bool _isLoadingEmployee;
     private bool _isSelectingProfession; // prevents filtering when we set text from selection
+    private EmployeeIdentitySnapshot? _loadedIdentity;
 
     // Form fields
     [ObservableProperty] private string _cardNumber = string.Empty;
@@ -194,6 +195,7 @@ public partial class EmployeeCardViewModel : ObservableObject
         RespiratorsSize = string.Empty;
         GlovesSize = string.Empty;
         SizItems.Clear();
+        _loadedIdentity = null;
         IsDirty = false;
         StatusMessage = "Новая карточка";
         OnPropertyChanged(nameof(IsExistingCard));
@@ -216,8 +218,19 @@ public partial class EmployeeCardViewModel : ObservableObject
         try
         {
             using var context = new SizDbContext();
+            var saveAsNew = false;
 
             if (_employeeId > 0)
+            {
+                if (HasEmployeeIdentityChanged(employee) &&
+                    _dialogService.ShowConfirmation(
+                        "Изменены основные данные сотрудника.\n\nСохранить карточку как новую запись?\n\nДа — создать новую карточку.\nНет — обновить текущую карточку."))
+                {
+                    saveAsNew = true;
+                }
+            }
+
+            if (_employeeId > 0 && !saveAsNew)
             {
                 // Update existing
                 var existing = await context.Employees
@@ -249,6 +262,7 @@ public partial class EmployeeCardViewModel : ObservableObject
             else
             {
                 // Insert new
+                employee.Id = 0;
                 employee.CreatedAt = DateTime.Now;
                 employee.UpdatedAt = DateTime.Now;
                 context.Employees.Add(employee);
@@ -271,6 +285,7 @@ public partial class EmployeeCardViewModel : ObservableObject
             await context.SaveChangesAsync();
 
             IsDirty = false;
+            _loadedIdentity = EmployeeIdentitySnapshot.From(employee);
             OnPropertyChanged(nameof(IsExistingCard));
             StatusMessage = "Карточка сохранена";
             _dialogService.ShowMessage("Карточка успешно сохранена");
@@ -434,6 +449,7 @@ public partial class EmployeeCardViewModel : ObservableObject
             }
 
             IsDirty = false;
+            _loadedIdentity = EmployeeIdentitySnapshot.From(employee);
             OnPropertyChanged(nameof(IsExistingCard));
             StatusMessage = $"Карточка: {employee.FullName}";
         }
@@ -499,6 +515,75 @@ public partial class EmployeeCardViewModel : ObservableObject
     public void MarkDirty()
     {
         IsDirty = true;
+    }
+
+    private bool HasEmployeeIdentityChanged(Employee current)
+    {
+        if (_loadedIdentity == null)
+            return false;
+
+        return !_loadedIdentity.Equals(EmployeeIdentitySnapshot.From(current));
+    }
+
+    private sealed class EmployeeIdentitySnapshot : IEquatable<EmployeeIdentitySnapshot>
+    {
+        public string LastName { get; init; } = string.Empty;
+        public string FirstName { get; init; } = string.Empty;
+        public string MiddleName { get; init; } = string.Empty;
+        public string PersonnelNumber { get; init; } = string.Empty;
+        public string Department { get; init; } = string.Empty;
+        public int? ProfessionId { get; init; }
+        public string ProfessionName { get; init; } = string.Empty;
+
+        public static EmployeeIdentitySnapshot From(Employee employee)
+        {
+            return new EmployeeIdentitySnapshot
+            {
+                LastName = Normalize(employee.LastName),
+                FirstName = Normalize(employee.FirstName),
+                MiddleName = Normalize(employee.MiddleName),
+                PersonnelNumber = Normalize(employee.PersonnelNumber),
+                Department = Normalize(employee.Department),
+                ProfessionId = employee.ProfessionId,
+                ProfessionName = Normalize(employee.ProfessionName)
+            };
+        }
+
+        public bool Equals(EmployeeIdentitySnapshot? other)
+        {
+            if (other is null)
+                return false;
+
+            return LastName == other.LastName
+                && FirstName == other.FirstName
+                && MiddleName == other.MiddleName
+                && PersonnelNumber == other.PersonnelNumber
+                && Department == other.Department
+                && ProfessionId == other.ProfessionId
+                && ProfessionName == other.ProfessionName;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is EmployeeIdentitySnapshot other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(
+                LastName,
+                FirstName,
+                MiddleName,
+                PersonnelNumber,
+                Department,
+                ProfessionId,
+                ProfessionName);
+        }
+
+        private static string Normalize(string? value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim();
+        }
     }
 }
 

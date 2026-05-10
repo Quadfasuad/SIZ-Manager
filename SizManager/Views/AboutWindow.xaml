@@ -6,28 +6,47 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner">
 
-    <StackPanel HorizontalAlignment="Center" Margin="30">
-        <TextBlock Text="СИЗ Менеджер" FontSize="24" FontWeight="Bold"
-                   HorizontalAlignment="Center" Margin="0,0,0,5" />
-        <TextBlock x:Name="VersionText" FontSize="14"
-                   HorizontalAlignment="Center" Foreground="Gray" Margin="0,0,0,20" />
+    <StackPanel HorizontalAlignment="Center" Margin="24">
+        <Border Background="{StaticResource BrushSurfaceMuted}"
+                BorderBrush="{StaticResource BrushBorder}"
+                BorderThickness="1"
+                CornerRadius="18"
+                Padding="22"
+                Width="380">
+            <StackPanel>
+                <TextBlock Text="СИЗ Менеджер" FontSize="24" FontWeight="Bold"
+                           HorizontalAlignment="Center" Margin="0,0,0,4" />
+                <TextBlock x:Name="VersionText" FontSize="14"
+                           HorizontalAlignment="Center"
+                           Foreground="{StaticResource BrushTextMuted}"
+                           Margin="0,0,0,16" />
 
-        <TextBlock TextWrapping="Wrap" TextAlignment="Center" Margin="0,0,0,15">
-            Программа для автоматизации заполнения личных карточек
-            учёта выдачи средств индивидуальной защиты (СИЗ)
-        </TextBlock>
+                <TextBlock TextWrapping="Wrap" TextAlignment="Center" Margin="0,0,0,14">
+                    Программа для автоматизации заполнения личных карточек
+                    учёта выдачи средств индивидуальной защиты.
+                </TextBlock>
 
-        <TextBlock TextWrapping="Wrap" TextAlignment="Center" FontSize="11" Foreground="Gray">
-            На основе Приказа Минтруда РФ от 29.10.2021 №767н
-            "Об утверждении Единых типовых норм выдачи СИЗ"
-        </TextBlock>
+                <Border Style="{StaticResource SectionPanelBorder}" Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="Нормативная основа"
+                                   Style="{StaticResource SectionPanelTitle}"
+                                   Margin="0,0,0,4" />
+                        <TextBlock TextWrapping="Wrap"
+                                   Foreground="{StaticResource BrushTextMuted}">
+                            Приказ Минтруда РФ от 29.10.2021 №767н
+                            «Об утверждении Единых типовых норм выдачи СИЗ».
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
 
-        <Separator Margin="0,15" />
+                <TextBlock Text=".NET 8.0 | WPF | SQLite" FontSize="11"
+                           HorizontalAlignment="Center"
+                           Foreground="{StaticResource BrushTextMuted}"
+                           Margin="0,14,0,0" />
+            </StackPanel>
+        </Border>
 
-        <TextBlock Text=".NET 8.0 | WPF | SQLite" FontSize="11"
-                   HorizontalAlignment="Center" Foreground="Gray" />
-
-        <Button Content="Закрыть" Padding="20,6" Margin="0,15,0,0"
+        <Button Content="Закрыть" Padding="20,6" Margin="0,16,0,0"
                 HorizontalAlignment="Center" IsCancel="True" />
     </StackPanel>
 </Window>

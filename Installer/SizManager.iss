@@ -4,7 +4,7 @@
 #define MyAppName "СИЗ Менеджер"
 #define MyAppNameEn "SIZ Manager"
 #ifndef MyAppVersion
-  #define MyAppVersion "1.2.0"
+  #define MyAppVersion "2.0.0"
 #endif
 #define MyAppPublisher "SIZ Manager"
 #define MyAppExeName "SizManager.exe"

@@ -14,7 +14,7 @@
     <SatelliteResourceLanguages>ru</SatelliteResourceLanguages>
     <DebugType>embedded</DebugType>
     <RootNamespace>SizManager</RootNamespace>
-    <Version>1.2.0</Version>
+    <Version>2.0.0</Version>
     <AssemblyTitle>СИЗ Менеджер</AssemblyTitle>
     <Description>Программа для автоматизации заполнения личных карточек учета выдачи СИЗ</Description>
   </PropertyGroup>
@@ -49,6 +49,8 @@
   <ItemGroup>
     <Resource Include="siz.ico" />
     <Resource Include="Resources\Banner.png" />
+    <Resource Include="..\prof_logo.png" Link="Resources\prof_logo.png" />
+    <Resource Include="Resources\Icons\*.png" />
   </ItemGroup>
 
 </Project>
