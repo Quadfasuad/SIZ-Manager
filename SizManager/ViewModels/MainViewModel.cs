@@ -29,6 +29,7 @@ public partial class MainViewModel : ObservableObject
 
     // Child ViewModel
     public EmployeeCardViewModel Card { get; }
+    public DermatologicalProtectionViewModel Dermatological { get; }
 
     public MainViewModel(
         JsonImportService importService,
@@ -37,6 +38,8 @@ public partial class MainViewModel : ObservableObject
         DocxExportService docxExportService,
         PdfExportService pdfExportService,
         ExcelExportService excelExportService,
+        DermatologicalExcelExportService dermatologicalExcelExportService,
+        DermatologicalPdfExportService dermatologicalPdfExportService,
         UpdateService updateService,
         DialogService dialogService)
     {
@@ -48,6 +51,8 @@ public partial class MainViewModel : ObservableObject
         Card = new EmployeeCardViewModel(
             validationService, docxExportService, pdfExportService,
             excelExportService, dialogService);
+        Dermatological = new DermatologicalProtectionViewModel(
+            dialogService, dermatologicalExcelExportService, dermatologicalPdfExportService);
 
         RefreshDatabaseInfo();
     }

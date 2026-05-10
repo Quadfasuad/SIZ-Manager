@@ -42,12 +42,22 @@ public partial class App : Application
         var backupService = new BackupService();
         var importService = new JsonImportService(backupService);
 
-        // Auto-import embedded database on first launch (if no professions exist)
+        // Auto-import embedded database on first launch or when the bundled reference is newer.
         try
         {
             using var checkCtx = new SizDbContext();
-            if (!checkCtx.Professions.Any())
+            var currentProfessionCount = checkCtx.Professions.Count();
+            var embeddedProfessionCount = importService.GetEmbeddedProfessionCountAsync()
+                .GetAwaiter()
+                .GetResult();
+
+            if (currentProfessionCount < embeddedProfessionCount)
             {
+                if (currentProfessionCount > 0)
+                {
+                    backupService.CreateBackupAsync().GetAwaiter().GetResult();
+                }
+
                 var task = importService.ImportFromEmbeddedResourceAsync();
                 task.GetAwaiter().GetResult();
             }
@@ -61,12 +71,15 @@ public partial class App : Application
         var docxExportService = new DocxExportService();
         var pdfExportService = new PdfExportService();
         var excelExportService = new ExcelExportService();
+        var dermatologicalExcelExportService = new DermatologicalExcelExportService();
+        var dermatologicalPdfExportService = new DermatologicalPdfExportService();
         var updateService = new UpdateService();
 
         // Create and show main window
         var mainVM = new MainViewModel(
             importService, backupService, validationService,
             docxExportService, pdfExportService, excelExportService,
+            dermatologicalExcelExportService, dermatologicalPdfExportService,
             updateService, dialogService);
 
         var mainWindow = new MainWindow { DataContext = mainVM };

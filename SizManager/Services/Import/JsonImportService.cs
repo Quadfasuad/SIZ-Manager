@@ -24,17 +24,28 @@ public class JsonImportService
     /// </summary>
     public async Task<(int professions, int sizItems)> ImportFromEmbeddedResourceAsync(IProgress<int>? progress = null)
     {
+        var data = await ReadEmbeddedDatabaseAsync();
+        ValidateData(data);
+        return await ImportDataAsync(data, progress);
+    }
+
+    public async Task<int> GetEmbeddedProfessionCountAsync()
+    {
+        var data = await ReadEmbeddedDatabaseAsync();
+        ValidateData(data);
+        return data.Professions.Count;
+    }
+
+    private static async Task<SizDatabase> ReadEmbeddedDatabaseAsync()
+    {
         var assembly = Assembly.GetExecutingAssembly();
         using var stream = assembly.GetManifestResourceStream(EmbeddedResourceName)
             ?? throw new InvalidOperationException("Встроенный справочник не найден в ресурсах приложения");
 
         using var reader = new StreamReader(stream);
         var json = await reader.ReadToEndAsync();
-        var data = JsonSerializer.Deserialize<SizDatabase>(json)
+        return JsonSerializer.Deserialize<SizDatabase>(json)
             ?? throw new InvalidOperationException("Не удалось разобрать встроенный JSON");
-
-        ValidateData(data);
-        return await ImportDataAsync(data, progress);
     }
 
     public async Task<(int professions, int sizItems)> ImportAsync(string filePath, IProgress<int>? progress = null)
