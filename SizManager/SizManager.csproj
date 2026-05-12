@@ -14,7 +14,7 @@
     <SatelliteResourceLanguages>ru</SatelliteResourceLanguages>
     <DebugType>embedded</DebugType>
     <RootNamespace>SizManager</RootNamespace>
-    <Version>2.0.0</Version>
+    <Version>2.1.0</Version>
     <AssemblyTitle>СИЗ Менеджер</AssemblyTitle>
     <Description>Программа для автоматизации заполнения личных карточек учета выдачи СИЗ</Description>
   </PropertyGroup>
